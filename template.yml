@@ -1,0 +1,67 @@
+AWSTemplateFormatVersion: 2010-09-09
+Transform: 'AWS::Serverless-2016-10-31'
+
+Resources:
+  ExpenseTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: "expenses"
+      AttributeDefinitions:
+        - AttributeName: "expenseId"
+          AttributeType: S
+      KeySchema:
+        - AttributeName: "expenseId"
+          KeyType: HASH
+      BillingMode: PAY_PER_REQUEST
+      SSESpecification:
+        SSEEnabled: True
+
+  EnterReceipt:
+    Type: AWS::Serverless::Function
+    Properties:
+      Runtime: nodejs12.x
+      CodeUri: src/enter-receipt
+      Handler: index.handler
+      Events:
+        APIenter:
+          Type: Api
+          Properties:
+            Path: /expense
+            Method: POST
+#            RestApiId: !Ref HelloApi ## This is optional.
+      Policies:
+        - Version: '2012-10-17'
+          Statement:
+            - Effect: Allow
+              Action:
+                - dynamodb:PutItem
+                - dynamodb:GetItem
+              Resource: !GetAtt "ExpenseTable.Arn"
+
+  ListExpenses:
+    Type: AWS::Serverless::Function
+    Properties:
+      Runtime: nodejs12.x
+      CodeUri: src/list-expenses
+      Handler: index.handler
+      Events:
+        APIlist:
+          Type: Api
+          Properties:
+            Path: /expenses
+            Method: GET
+#            RestApiId: !Ref HelloApi ## This is optional.
+
+  UpdateExpense:
+    Type: AWS::Serverless::Function
+    Properties:
+      Runtime: nodejs12.x
+      CodeUri: src/update-expense
+      Handler: index.handler
+      Events:
+        APIupdate:
+          Type: Api
+          Properties:
+            Path: /expense/{id}
+            Method: PUT
+#            RestApiId: !Ref HelloApi ## This is optional.
