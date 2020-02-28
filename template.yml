@@ -5,7 +5,6 @@ Resources:
   ExpenseTable:
     Type: AWS::DynamoDB::Table
     Properties:
-      TableName: "expenses"
       AttributeDefinitions:
         - AttributeName: "expenseId"
           AttributeType: S
@@ -28,6 +27,9 @@ Resources:
           Properties:
             Path: /expense
             Method: POST
+      Environment:
+        Variables:
+          EXPENSE_TABLE_NAME: !Ref ExpenseTable
 #            RestApiId: !Ref HelloApi ## This is optional.
       Policies:
         - Version: '2012-10-17'

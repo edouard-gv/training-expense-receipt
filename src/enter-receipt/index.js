@@ -1,5 +1,6 @@
 const uuidv4 = require('uuid/v4');
 const AWS = require('aws-sdk');
+const EXPENSE_TABLE_NAME = process.env.EXPENSE_TABLE_NAME;
 
 exports.handler = async (event) => {
 
@@ -19,12 +20,12 @@ exports.handler = async (event) => {
     const dynamodb = new AWS.DynamoDB.DocumentClient();
 
     await dynamodb.put({
-        TableName: "expenses",
+        TableName: EXPENSE_TABLE_NAME,
         Item: receipt
     }).promise();
 
     let readFromDB = await dynamodb.get({
-        TableName: "expenses",
+        TableName: EXPENSE_TABLE_NAME,
         Key: {expenseId: expenseId}
     }).promise();
 
