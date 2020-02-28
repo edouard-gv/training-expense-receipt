@@ -23,6 +23,8 @@ phases:
     commands:
       # Use Pre-Build phase to run tests, install any code deps or any other customization before build
       # - echo "[Pre-Build phase]"
+      - cd src/enter-receipt
+      - npm ci
   build:
     commands:
       # Use Build phase to build your artifacts (compile, package, etc.)
