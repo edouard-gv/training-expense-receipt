@@ -25,6 +25,7 @@ phases:
       # - echo "[Pre-Build phase]"
       - cd src/enter-receipt
       - npm ci
+      - cd ../..
   build:
     commands:
       # Use Build phase to build your artifacts (compile, package, etc.)
